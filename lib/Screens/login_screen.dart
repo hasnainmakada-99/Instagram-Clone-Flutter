@@ -82,7 +82,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Text("Don't have an account ?"),
+                    child: Text(
+                      "Don't have an account ?",
+                      style: TextStyle(fontSize: 18),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   GestureDetector(
@@ -90,7 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       child: Text(
                         "Sign up. ",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
