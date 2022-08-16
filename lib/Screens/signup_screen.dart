@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Container(
                     child: Text(
-                      "Don't have an account ?",
+                      "Already have an account ?",
                       style: TextStyle(fontSize: 18),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -134,7 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onTap: () {},
                     child: Container(
                       child: Text(
-                        "Sign up. ",
+                        "Log in. ",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
