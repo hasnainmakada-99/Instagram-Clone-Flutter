@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/Authentication/AuthUser.dart';
@@ -32,7 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("Builded ashdkjlaskjdha");
+    // setState(() {});
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -74,10 +75,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     bottom: -10,
                     left: 80,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        selectImage();
+                      },
                       icon: const Icon(Icons.add_a_photo),
                     ),
-                  ),
+                  )
                 ],
               ),
               const SizedBox(
