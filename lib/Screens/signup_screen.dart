@@ -1,7 +1,14 @@
+import 'dart:developer';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/Authentication/AuthUser.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
+import 'package:instagram_clone/Utilities/utils.dart';
 import 'package:instagram_clone/Widgets/input_widget.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -15,9 +22,17 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
+  Uint8List? img;
+  selectImage() async {
+    Uint8List image = await pickImage(ImageSource.gallery);
+    setState(() {
+      img = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    log("Builded ashdkjlaskjdha");
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -45,17 +60,22 @@ class _SignupScreenState extends State<SignupScreen> {
               // Circular Widget to accept and show our selected file
               Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        "https://images.unsplash.com/photo-1593783162886-d2277f7d5908?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"),
-                  ),
+                  img != null
+                      ? CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(img!),
+                        )
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              "https://imgs.search.brave.com/rkGPu7qVPTySzrC0BhrrJvsOhMMi2KFTwDG3JtAM5rM/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93d3cu/c2FsaXNidXJ5dXQu/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDIwLzA5L2F2YXRh/ci0xLXNjYWxlZC5q/cGVn"),
+                        ),
                   Positioned(
                     bottom: -10,
                     left: 80,
                     child: IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.add_a_photo),
+                      icon: const Icon(Icons.add_a_photo),
                     ),
                   ),
                 ],
@@ -64,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 24,
               ),
               TextFieldInput(
-                editingController: emailController,
+                editingController: usernameController,
                 hintText: 'Enter Your Username',
                 textInputType: TextInputType.text,
               ),
@@ -92,7 +112,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               // Textfield input for BIO
               TextFieldInput(
-                editingController: passwordController,
+                editingController: bioController,
                 hintText: 'Enter Your Bio',
                 textInputType: TextInputType.text,
               ),
@@ -100,18 +120,32 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 24,
               ),
               InkWell(
+                onTap: () async {
+                  String email = emailController.text;
+                  String password = passwordController.text;
+                  String bio = bioController.text;
+                  String userName = usernameController.text;
+
+                  String result = await AuthUser().userSignUp(
+                    email: email,
+                    password: password,
+                    bio: bio,
+                    userName: userName,
+                  );
+                },
                 child: Container(
-                  child: const Text('Log in'),
+                  child: const Text('Sign up'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
                       ),
-                      color: blueColor),
+                    ),
+                    color: blueColor,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -134,7 +168,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onTap: () {},
                     child: Container(
                       child: Text(
-                        "Log in. ",
+                        "Sign up. ",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,

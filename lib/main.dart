@@ -8,6 +8,7 @@ import 'package:instagram_clone/Responsive/web_screen_layout.dart';
 import 'package:instagram_clone/Screens/login_screen.dart';
 import 'package:instagram_clone/Screens/signup_screen.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
