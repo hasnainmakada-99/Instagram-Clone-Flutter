@@ -1,15 +1,12 @@
 import 'dart:developer';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/Authentication/AuthUser.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
 import 'package:instagram_clone/Utilities/utils.dart';
 import 'package:instagram_clone/Widgets/input_widget.dart';
-import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -24,16 +21,46 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController bioController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   Uint8List? img;
-  selectImage() async {
+  bool isLoading = false;
+  void selectImage() async {
     Uint8List image = await pickImage(ImageSource.gallery);
+    setState(
+      () {
+        img = image;
+      },
+    );
+  }
+
+  void signUpUser() async {
     setState(() {
-      img = image;
+      isLoading = true;
+    });
+    String email = emailController.text;
+    String password = passwordController.text;
+    String bio = bioController.text;
+    String userName = usernameController.text;
+
+    String result = await AuthUser().userSignUp(
+      email: email,
+      password: password,
+      bio: bio,
+      userName: userName,
+      image: img!,
+    );
+
+    if (result == 'invalid-email') {
+      showSnackBar(context, 'The email is invalid');
+    } else {
+      showSnackBar(context, 'Success');
+    }
+
+    setState(() {
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // setState(() {});
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -124,20 +151,16 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  String email = emailController.text;
-                  String password = passwordController.text;
-                  String bio = bioController.text;
-                  String userName = usernameController.text;
-
-                  String result = await AuthUser().userSignUp(
-                    email: email,
-                    password: password,
-                    bio: bio,
-                    userName: userName,
-                  );
+                  signUpUser();
                 },
                 child: Container(
-                  child: const Text('Sign up'),
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : const Text('Sign up'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),

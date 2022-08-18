@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone/Authentication/Storage_Methods.dart';
 
 class AuthUser {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -13,6 +14,7 @@ class AuthUser {
     required String password,
     required String bio,
     required String userName,
+    required Uint8List image,
   }) async {
     String res = 'Some error occured';
     try {
@@ -24,18 +26,40 @@ class AuthUser {
             email: email, password: password);
         String userId = credential.user!.uid;
         log(userId);
+
+        String photoURL = await StorageMethods()
+            .uploadImagetoStorage("profilePics", image, false);
+
         await firestore.collection('users').doc(userId).set({
           "email": email,
           "username": userName,
           "uid": userId,
           "bio": bio,
+          "photo url": photoURL,
           "following": [],
           "followers": [],
         });
         res = "Successfull";
       }
-    } catch (e) {
-      res = e.toString();
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-email') {
+        res = err.code.toString();
+      }
+    }
+    return res;
+  }
+
+  Future<String> loginUser(
+      {required String email, required String password}) async {
+    String res = 'Some Error Occured';
+
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await auth.signInWithEmailAndPassword(email: email, password: password);
+        res = 'Success';
+      }
+    } catch (err) {
+      return err.toString();
     }
     return res;
   }
