@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/Authentication/AuthUser.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
+import 'package:instagram_clone/Utilities/routes.dart';
 import 'package:instagram_clone/Utilities/utils.dart';
 import 'package:instagram_clone/Widgets/input_widget.dart';
 
@@ -191,10 +192,15 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        loginScreen,
+                        (route) => false,
+                      );
+                    },
                     child: Container(
                       child: Text(
-                        "Sign up. ",
+                        "Login",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
