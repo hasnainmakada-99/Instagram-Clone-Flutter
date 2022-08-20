@@ -11,6 +11,8 @@ import 'package:instagram_clone/Screens/login_screen.dart';
 import 'package:instagram_clone/Screens/signup_screen.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
 import 'package:instagram_clone/Utilities/routes.dart';
+import 'package:instagram_clone/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -38,44 +40,51 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        loginScreen: (context) => const LoginScreen(),
-        signupScreen: (context) => const SignupScreen(),
-      },
-      title: 'Instagram Clone Using Flutter',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark()
-          .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          // Connection to the future has been made
-          if (snapshot.connectionState == ConnectionState.active) {
-            // means the snapshot has the user data
-            if (snapshot.hasData) {
-              return const ResponsiveLayout(
-                webScreenLayout: WebScreenLayout(),
-                mobileScreenLayout: MobileScreenLayout(),
-              );
-            }
-            // otherwise the snapshot contains error while authenticating
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('${snapshot.error}'),
-              );
-            }
-          }
-          // means the connection to the future has still not be made
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
-            );
-          }
-          return const LoginScreen();
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        routes: {
+          loginScreen: (context) => const LoginScreen(),
+          signupScreen: (context) => const SignupScreen(),
         },
+        title: 'Instagram Clone Using Flutter',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.dark()
+            .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            // Connection to the future has been made
+            if (snapshot.connectionState == ConnectionState.active) {
+              // means the snapshot has the user data
+              if (snapshot.hasData) {
+                return const ResponsiveLayout(
+                  webScreenLayout: WebScreenLayout(),
+                  mobileScreenLayout: MobileScreenLayout(),
+                );
+              }
+              // otherwise the snapshot contains error while authenticating
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('${snapshot.error}'),
+                );
+              }
+            }
+            // means the connection to the future has still not be made
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                ),
+              );
+            }
+            return const LoginScreen();
+          },
+        ),
       ),
     );
   }
