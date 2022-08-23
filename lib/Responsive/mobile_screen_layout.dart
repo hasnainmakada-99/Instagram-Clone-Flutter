@@ -1,3 +1,4 @@
+import 'package:instagram_clone/Utilities/globals.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 
 import '../Models/user_model.dart' as model;
@@ -39,23 +40,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     //model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: PageView(
-        children: [
-          Center(
-            child: Text('Feed'),
-          ),
-          Center(
-            child: Text('Search'),
-          ),
-          Center(
-            child: Text('Post'),
-          ),
-          Center(
-            child: Text('Likes'),
-          ),
-          Center(
-            child: Text('Profile'),
-          )
-        ],
+        children: homeScreenItems,
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
