@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class StorageMethods {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -13,6 +14,10 @@ class StorageMethods {
     Reference reference =
         await storage.ref().child(childname).child(auth.currentUser!.uid);
 
+    if (isPost) {
+      String id = const Uuid().v1();
+      reference = reference.child(id);
+    }
     // Uploading the actual file
     UploadTask uploadTask = reference.putData(file);
     // Waiting for the file to get uploaded to firebase storage

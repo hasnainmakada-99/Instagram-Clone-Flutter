@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/Authentication/firestore_methods.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
+import 'package:instagram_clone/Utilities/loading_screen.dart';
 import 'package:instagram_clone/Utilities/utils.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +20,9 @@ class AddPostScreen extends StatefulWidget {
 
 class _AddPostScreenState extends State<AddPostScreen> {
   TextEditingController descriptionController = TextEditingController();
-
   Uint8List? _file;
+
+  bool isLoading = false;
 
   selectImage(BuildContext parentContext) async {
     return showDialog(
@@ -67,6 +70,51 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
   }
 
+  void postImage(String uid, String username, String profImage) async {
+    setState(
+      () {
+        isLoading = true;
+      },
+    );
+    try {
+      String res = await FireStoreMethods().uploadPost(
+        descriptionController.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+      if (res == 'success') {
+        setState(
+          () {
+            isLoading = false;
+          },
+        );
+
+        showSnackBar(context, 'Posted');
+
+        clearImage();
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (e) {
+      setState(
+        () {
+          isLoading = false;
+        },
+      );
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void clearImage() {
+    setState(
+      () {
+        _file = null;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final UserProvider provider = Provider.of<UserProvider>(context);
@@ -84,19 +132,27 @@ class _AddPostScreenState extends State<AddPostScreen> {
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
               leading: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  clearImage();
+                },
                 icon: const Icon(Icons.arrow_back),
               ),
               title: const Text('Post to'),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    postImage(
+                      provider.getUser.uid,
+                      provider.getUser.userName,
+                      provider.getUser.photoURL,
+                    );
+                  },
                   child: const Text(
                     'Post',
                     style: TextStyle(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
+                      fontSize: 16.0,
                     ),
                   ),
                 ),
@@ -104,9 +160,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: <Widget>[
-                const SizedBox(
-                  height: 15,
-                ),
+                isLoading
+                    ? const LinearProgressIndicator()
+                    : const Padding(padding: EdgeInsets.only(top: 0.0)),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
