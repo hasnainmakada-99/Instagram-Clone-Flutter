@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +11,7 @@ import 'package:instagram_clone/Screens/login_screen.dart';
 import 'package:instagram_clone/Screens/signup_screen.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
 import 'package:instagram_clone/Utilities/routes.dart';
+
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
