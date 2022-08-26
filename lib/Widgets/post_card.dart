@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/Authentication/firestore_methods.dart';
 import 'package:instagram_clone/Models/user_model.dart';
+import 'package:instagram_clone/Screens/comments_screen.dart';
 import 'package:instagram_clone/Utilities/colors.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:intl/intl.dart';
@@ -94,7 +96,12 @@ class _PostCardState extends State<PostCard> {
 
           // Image Section
           GestureDetector(
-            onDoubleTap: () {
+            onDoubleTap: () async {
+              await FireStoreMethods().likePost(
+                widget.snap['postId'],
+                user.uid,
+                widget.snap['likes'],
+              );
               setState(
                 () {
                   isLikeAnimating = true;
@@ -116,6 +123,7 @@ class _PostCardState extends State<PostCard> {
                   duration: const Duration(milliseconds: 200),
                   opacity: isLikeAnimating ? 1 : 0,
                   child: LikeAnimation(
+                    smallLike: true,
                     child: const Icon(
                       Icons.favorite,
                       color: primaryColor,
@@ -143,15 +151,26 @@ class _PostCardState extends State<PostCard> {
                 isAnimating: widget.snap['likes'].contains(user.uid),
                 smallLike: true,
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
+                  onPressed: () async {
+                    await FireStoreMethods().likePost(
+                        widget.snap['postId'], user.uid, widget.snap['likes']);
+                  },
+                  icon: widget.snap['likes'].contains(user.uid)
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : const Icon(Icons.favorite_border),
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CommentScreen(),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.comment_outlined),
               ),
               IconButton(

@@ -8,7 +8,7 @@ class LikeAnimation extends StatefulWidget {
   bool isAnimating;
   Duration duration;
   VoidCallback? onEnd;
-  bool? smallLike;
+  bool smallLike;
 
   LikeAnimation({
     Key? key,
@@ -16,7 +16,7 @@ class LikeAnimation extends StatefulWidget {
     required this.isAnimating,
     this.duration = const Duration(milliseconds: 150),
     this.onEnd,
-    this.smallLike,
+    required this.smallLike,
   }) : super(key: key);
 
   @override
@@ -48,7 +48,7 @@ class _LikeAnimationState extends State<LikeAnimation>
   }
 
   startAnimation() async {
-    if (widget.isAnimating || widget.smallLike!) {
+    if (widget.isAnimating || widget.smallLike) {
       await controller.forward();
       await controller.reverse();
       await Future.delayed(
