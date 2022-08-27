@@ -57,4 +57,77 @@ class FireStoreMethods {
       log(e.toString());
     }
   }
+
+  Future<void> likeComment(
+    String postId,
+    String commentId,
+    String uid,
+    List likes,
+  ) async {
+    try {
+      if (likes.contains(uid)) {
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .update(
+          {
+            'likes': FieldValue.arrayRemove([uid]),
+          },
+        );
+      } else {
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .update(
+          {
+            'likes': FieldValue.arrayUnion([uid]),
+          },
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> postComment(String postId, String username, String comment,
+      String profilePic, String uid) async {
+    try {
+      if (comment.isNotEmpty) {
+        String commentId = Uuid().v1();
+        _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set(
+          {
+            'profilePic': profilePic,
+            'username': username,
+            'postId': postId,
+            'comment': comment,
+            'uid': uid,
+            'likes': [],
+            'commentId': commentId,
+            'datePublished': DateTime.now(),
+          },
+        );
+      } else {
+        log('Text is Empty, Please make a comment');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> deletePost(String postId) async {
+    try {
+      _firestore.collection('posts').doc(postId).delete();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }
