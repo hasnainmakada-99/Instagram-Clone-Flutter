@@ -90,9 +90,11 @@ class _CommentScreenState extends State<CommentScreen> {
                     user.uid,
                   );
 
-                  setState(() {
-                    commentController.text = "";
-                  });
+                  setState(
+                    () {
+                      commentController.text = "";
+                    },
+                  );
                 },
                 child: Container(
                   padding:

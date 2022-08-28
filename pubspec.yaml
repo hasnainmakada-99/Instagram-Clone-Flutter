@@ -34,6 +34,7 @@ dependencies:
   firebase_storage: any
   flutter:
     sdk: flutter
+  flutter_staggered_grid_view: any
   flutter_svg: ^1.1.3
   image_picker: ^0.8.5+3
   intl: ^0.17.0
