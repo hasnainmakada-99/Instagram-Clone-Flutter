@@ -1,13 +1,93 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:instagram_clone/Utilities/colors.dart';
+import 'package:instagram_clone/Utilities/globals.dart';
 
-class WebScreenLayout extends StatelessWidget {
+class WebScreenLayout extends StatefulWidget {
   const WebScreenLayout({Key? key}) : super(key: key);
 
   @override
+  State<WebScreenLayout> createState() => _WebScreenLayoutState();
+}
+
+class _WebScreenLayoutState extends State<WebScreenLayout> {
+  int _page = 0;
+  // For tabs animation
+  late PageController pageController;
+  @override
+  void initState() {
+    pageController = PageController();
+    super.initState();
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
+  void navigationTapped(int page) {
+    pageController.jumpToPage(page);
+    setState(() {
+      _page = page;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('This is Web Screen'),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        centerTitle: false,
+        title: SvgPicture.asset(
+          'lib/assets/ic_instagram.svg',
+          color: primaryColor,
+          height: 32,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.home,
+              color: _page == 0 ? primaryColor : secondaryColor,
+            ),
+            onPressed: () => navigationTapped(0),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: _page == 1 ? primaryColor : secondaryColor,
+            ),
+            onPressed: () => navigationTapped(1),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.add_a_photo,
+              color: _page == 2 ? primaryColor : secondaryColor,
+            ),
+            onPressed: () => navigationTapped(2),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.favorite,
+              color: _page == 3 ? primaryColor : secondaryColor,
+            ),
+            onPressed: () => navigationTapped(3),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.person,
+              color: _page == 4 ? primaryColor : secondaryColor,
+            ),
+            onPressed: () => navigationTapped(4),
+          ),
+        ],
+      ),
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        children: homeScreenItems,
+        controller: pageController,
+        onPageChanged: onPageChanged,
       ),
     );
   }

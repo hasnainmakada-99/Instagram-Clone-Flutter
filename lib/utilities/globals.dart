@@ -9,7 +9,7 @@ var homeScreenItems = [
   Center(child: FeedScreen()),
   SearchScreen(),
   AddPostScreen(),
-  Center(child: Text('notfications screen')),
+  Center(child: Text('Stay tuned..')),
   ProfileScreen(
     uid: FirebaseAuth.instance.currentUser!.uid,
   ),
