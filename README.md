@@ -16,13 +16,11 @@ This clone is made completely using Flutter & Firebase, It has all the functiona
 - Posting Stories
 - Uploading reels
 - Messaging functionality
+- Notifications functionality
 
 > **The above mentioned functionalities will be released in future, till then stay tuned..** 
 
-<br>
-
 ---
-<br>
 
 ## Tech Stack used to build this clone
 <br>
@@ -35,13 +33,42 @@ This clone is made completely using Flutter & Firebase, It has all the functiona
 - ### **Firebase Storage**
 - ### **Firebase Authentication**
 
-## Available for every screen
-
-Yes you guessed it right, This clone is completely responsive and it can be used on every screen whether it be mobile, desktop, web, tablet.. anything you want to test on it.. :grinning:
-
-Yo don't believe, Here are the gif for web and mobile (For testing purposes)
-
-### WEB (Chrome)
-### Mobile (Pixel 5)
+## Screenshots (Mobile)
+<table>
+<tr>
+<td>
+    <img src="./Screen%20Shots/ss1.png" height="400">
+</td>
+<td> 
+<img src="./Screen%20Shots/ss2.png" height="400">
+</td>
+<td>
+<img src="./Screen%20Shots/ss3.png" height="400"></td>
+<td>
+<img src="./Screen%20Shots/ss4.png" height="400"></td>
+</tr>
+</table>
 
 ## Getting started
+
+**Steps to get started**
+
+1. Fork the repository on your account by clicking the fork button on the top right side corner
+
+2. After forking successfully, Open terminal and clone the repository on your local machine 
+`
+git clone https://github.com/<your-username>/Instagram-Clone-Flutter
+`
+3. After cloning the repository successfully, Navigate to the folder `cd Instagram-Clone-flutter`
+
+4. Run `flutterfire configure` to configure the project with your firestore database
+
+5. After that run `flutter pub get` to get all the packages used in the app
+
+6. To run the application on app, Plug in your mobile device and turn on USB debugging, If you don't know how to enable it, [check out now](https://rb.gy/mcyrii)
+
+7. After plugging in your mobile successfully, Run `flutter run` and it will be up and running on your device
+
+### To test the sample apk: [download](https://drive.google.com/uc?export=download&id=136cL2dBqRxuyiTJPyoeGDWBZIOrfOQIP)
+
+## Happy Fluttering :smiley:
